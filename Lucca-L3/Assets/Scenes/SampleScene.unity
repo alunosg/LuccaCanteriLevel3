@@ -176,7 +176,7 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   m_Enabled: 1
-  serializedVersion: 12
+  serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 0.96217394, b: 0.3443396, a: 1}
   m_Intensity: 1
@@ -228,7 +228,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
   m_LightUnit: 1
   m_LuxAtDistance: 1
@@ -473,7 +473,7 @@ Transform:
   m_GameObject: {fileID: 1031518128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.87}
+  m_LocalPosition: {x: 0, y: 0, z: 0.678}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -556,6 +556,7 @@ Terrain:
   m_AllowAutoConnect: 1
   m_EnableHeightmapRayTracing: 1
   m_EnableTreesAndDetailsRayTracing: 0
+  m_EnableHeightmapLODFrustumCulling: 1
   m_TreeMotionVectorModeOverride: 3
 --- !u!4 &1443858445
 Transform:
@@ -688,7 +689,7 @@ MonoBehaviour:
   xRotMax: 45
   bulletPrefab: {fileID: 37460488173802896, guid: faf1e94afcc479d4cb020852e86a7e34, type: 3}
   bulletPoint: {fileID: 1031518129}
-  bulletSpeed: 67
+  bulletSpeed: 20
 --- !u!114 &1954981531
 MonoBehaviour:
   m_ObjectHideFlags: 0

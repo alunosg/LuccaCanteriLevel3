@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public Transform camPivot;
     public float xRotSpeed = 0.1f; 
     public float xRotMin = -45; 
-    public float xRotMax = 45;
+    public float xRotMax = 45; 
 
     public GameObject bulletPrefab;
     public Transform bulletPoint;
