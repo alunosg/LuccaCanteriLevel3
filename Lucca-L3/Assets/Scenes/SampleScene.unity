@@ -666,6 +666,7 @@ GameObject:
   - component: {fileID: 1443858445}
   - component: {fileID: 1443858444}
   - component: {fileID: 1443858443}
+  - component: {fileID: 1443858446}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -749,6 +750,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1443858446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443858442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 7facdc6168dc6d54c842a7865628f8bf, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &1474615431
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,6 +793,7 @@ GameObject:
   - component: {fileID: 1474615434}
   - component: {fileID: 1474615433}
   - component: {fileID: 1474615432}
+  - component: {fileID: 1474615435}
   m_Layer: 6
   m_Name: Enemy67
   m_TagString: Enemy
@@ -779,6 +813,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f26ec9d7f57a843838d6ff79a0e1eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
+  nav: {fileID: 1474615435}
+  chaseDistance: 20
+  attackDistance: 2
+  attackDuration: 2
 --- !u!136 &1474615433
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -818,6 +856,28 @@ Transform:
   - {fileID: 1507186123}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!195 &1474615435
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474615431}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!4 &1507186123 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f1fb038e1b3a26040b379069a94cd0d4, type: 3}
