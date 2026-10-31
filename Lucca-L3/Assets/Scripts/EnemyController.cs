@@ -7,11 +7,28 @@ public class EnemyController : MonoBehaviour
     private enum EnemyStates{Idle, Chase, Attack, Hit, Death}
     private EnemyStates state = EnemyStates.Idle;
     public NavMeshAgent nav; 
+    public Animator anim;
     public float chaseDistance = 20f;
     public float attackDistance = 2f; 
-    public float attackDuration = 2f; 
+    public float attackDuration = 2f;
+
+    public Transform attackPoint;
+    public float attackRadius = 1.5f; 
+    public float attackHitDelay = 0.75f;
+    public float damage = 1;
+
+    public GameObject attackHitFx;
+    public GameObject HitFx;
+    public GameObject deathFx;
+
+    public AudioSource audioSource;
+    public AudioClip attackSFX;
+    public AudioClip attackHitSFX;
+    public AudioClip deathSFX;
+
     private PlayerController player; 
     private float distance = 999;
+    private bool locked = false;
     // Start is called once before the first execution of Update67after the MonoBehaviour is created        
     void Start()
     {
@@ -21,6 +38,8 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame                          67
     void Update()                                             
     {
+        if(locked) return;
+
         distance = Vector3.Distance(transform.position, player.transform.position);
 
         switch (state)
@@ -50,6 +69,7 @@ public class EnemyController : MonoBehaviour
         {
             state = EnemyStates.Chase;
             nav.isStopped = false;
+            anim.SetBool("IsRunning", true);
         }
     }
 
@@ -59,12 +79,11 @@ public class EnemyController : MonoBehaviour
         {
             state = EnemyStates.Idle;
             nav.isStopped = true;
-                
+            anim.SetBool("IsRunning", false);
         }
         else if(distance < attackDistance)
         {
-            //Enter Attack
-
+            EnterAttack();
         }
         else
         {
@@ -78,16 +97,17 @@ public class EnemyController : MonoBehaviour
         {
             state = EnemyStates.Idle;
             nav.isStopped = true; 
-            
+            anim.SetBool("IsRunning", false);
         }
         else if(distance > attackDistance) 
         {
             state = EnemyStates.Chase;
             nav.isStopped = false;
+            anim.SetBool("IsRunning", true);
         }
         else
         {
-            //Enter Attack
+            EnterAttack();
         }
     
     }
@@ -100,5 +120,43 @@ public class EnemyController : MonoBehaviour
     void DeathUpdate()
     {
         
+    }
+
+    void Unlock() => locked = false;
+
+    void EnterAttack()
+    {
+        locked = true;
+        nav.isStopped = true; 
+        anim.SetTrigger("Attack");
+        anim.SetBool("IsRunning", false);
+        state = EnemyStates.Attack;
+
+        if (attackSFX) audioSource.PlayOneShot(attackSFX); 
+
+        CancelInvoke("Unlock");       
+        Invoke("Unlock", attackDuration);
+
+        CancelInvoke("Unlock");
+        Invoke("Unlock", attackDuration);
+
+        CancelInvoke("DealDamage");
+        Invoke("DealDamage", attackHitDelay);
+    }
+
+    void DealDamage()
+    {
+        Collider[] hits = Physics.OverlapSphere(attackPoint.position, attackRadius);
+        for(int i = 0; i<hits.Length; i++)
+        {
+            if (hits[i].CompareTag("Player"))
+            {
+                if (attackHitSFX) audioSource.PlayOneShot(attackHitSFX); 
+                if (attackHitFx) Instantiate(attackHitSFX, attackPoint. position, attackPoint.rotation);
+
+                player.GetHit(damage);
+
+            }
+        }
     }
 }    

@@ -1,5 +1,8 @@
+using System.Data.Common;
 using UnityEngine;
 using UnityEngine. InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,10 +20,28 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform bulletPoint;
     public float bulletSpeed = 30; 
+    
+    public Image hpImage;
+
+     public float hp = 3;
+    public float deathDuration = 3f;
+    private float maxHp;
+    public AudioSource audioSource;
+      public GameObject HitFx;
+        public GameObject deathFx;
+    public AudioClip attackSFX;
+    public AudioClip deathSFX;
+    public AudioClip hitSFX;
 
 
     private float xRot = 0f;
+
+    private bool locked = false;
     private Vector2 moveInput;
+    private void Start()
+    {
+        maxHp = hp;
+    }
 
     private void FixedUpdate()
     {
@@ -34,13 +55,17 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (locked) return;
         moveInput = context.ReadValue<Vector2>();
 
     }
 
 
     public void OnLook(InputAction.CallbackContext context)
-    {
+    {     
+        if (locked) return;
+
+
         Vector2 LookInput = context.ReadValue<Vector2>();
         transform.Rotate(Vector3.up * LookInput.x * rotationSpeed);
         
@@ -51,7 +76,9 @@ public class PlayerController : MonoBehaviour
     }
     
     public void OnJump(InputAction.CallbackContext context)
-    {
+    {       
+         if (locked) return;
+
         if (context.performed)
         {
             if(Physics.Raycast(transform.position, Vector3.down, 1.1f, floorLayers))
@@ -63,12 +90,48 @@ public class PlayerController : MonoBehaviour
     }
 
     public void OnAttack(InputAction.CallbackContext context)
-    {
+    {       
+         if (locked) return;
+
         if (context.performed)
         {
             GameObject b = Instantiate(bulletPrefab, bulletPoint.position,bulletPoint.rotation);
             b.GetComponent<Rigidbody>().linearVelocity = bulletPoint.forward * bulletSpeed;
 
+             if (attackSFX) audioSource.PlayOneShot(attackSFX);
+
         }  
     }
+
+    public void GetHit(float damage)
+    {
+        if (hp > 0)
+        {
+            hp -= damage; 
+            if(HitFx) Instantiate(HitFx,transform.position, transform.rotation);
+            if (hitSFX) audioSource.PlayOneShot(hitSFX);
+
+            hpImage. fillAmount = hp/ maxHp; 
+
+            if (hp > 0)
+            {
+                //vivo 
+            }
+            else
+            {
+                 if (deathSFX) audioSource.PlayOneShot(deathSFX);
+                    rig.linearVelocity = Vector3.zero; 
+                    locked =  true; 
+                 CancelInvoke("Reload");
+                 Invoke("Reload", deathDuration);
+            }
+        }
+    }
+
+    public void Reload() => SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
 }
+
+
+
+
