@@ -1,8 +1,13 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
     public Rigidbody rig;
+
+    public float damage = 1; 
+    
+    public GameObject hitFX;
     public Transform model;
 
     public float spinSpeed = 720f;
@@ -16,4 +21,18 @@ public class Bullet : MonoBehaviour
     {
         model.Rotate(transform.up * spinSpeed * Time.deltaTime);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            other.GetComponent<EnemyController>().GetHit(damage);
+
+        }
+
+        if(hitFX) Instantiate(hitFX, transform.position, transform.rotation);
+
+        Destroy(gameObject);
+    }
+
 }
